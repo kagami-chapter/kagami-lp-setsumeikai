@@ -418,10 +418,10 @@ sup {
   flex-direction: column;
   justify-content: center;
   padding: 80px var(--sp-3) 64px;
-  /* 画像_ビジョン.jpg を背景に + ダークオーバーレイ */
+  /* kagami-vision.jpg を背景に + ダークオーバーレイ */
   background-image:
     linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.90) 100%),
-    url('画像_ビジョン.jpg');
+    url('kagami-vision.jpg');
   background-size: cover;
   background-position: center center;
   background-color: var(--color-bg-dark); /* 画像読み込み失敗時の fallback */
@@ -1238,7 +1238,7 @@ sup {
   position: relative;
   background-image:
     linear-gradient(rgba(10,10,10,0.86), rgba(10,10,10,0.86)),
-    url('画像_ビジョン.jpg');
+    url('kagami-vision.jpg');
   background-size: cover;
   background-position: center;
   background-color: var(--color-bg-dark);
