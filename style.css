@@ -1,0 +1,1605 @@
+/* ================================================================
+   BNI 鑑（かがみ）チャプター LP — style.css
+   モバイルファースト（min-width メディアクエリ）
+   デザイントークンはすべて :root で管理
+   ================================================================ */
+
+
+/* ================================================================
+   1. CSS カスタムプロパティ（デザイントークン）
+   ================================================================ */
+:root {
+  /* カラー */
+  --color-bg-dark:      #0A0A0A;
+  --color-bg-light:     #FFFFFF;
+  --color-bg-muted:     #F8F7F5;
+  --color-gold:         #C9A84C;
+  --color-gold-hover:   #D4B55A;
+  --color-gold-subtle:  rgba(201, 168, 76, 0.14);
+  --color-gold-border:  rgba(201, 168, 76, 0.40);
+  --color-text-dark:    #1A1A1A;
+  --color-text-light:   #F0F0F0;
+  --color-text-muted:   rgba(255, 255, 255, 0.72); /* [品質改善] 0.65→0.72: WCAG AA準拠のコントラスト確保 */
+  --color-text-sub:     #555555;
+  --color-text-caption: #888888;
+  --color-green:        #2A7A4A;
+  --color-red-muted:    #C05050;
+  --color-border-light: #E8E6E0;
+  --color-border-subtle:rgba(255, 255, 255, 0.08);
+
+  /* スペーシング（8pxグリッド） */
+  --sp-1:  8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-5: 40px;
+  --sp-6: 48px;
+  --sp-8: 64px;
+  --sp-10: 80px;
+
+  /* セクション余白 */
+  --section-v: 64px;    /* モバイル */
+  --section-h: 20px;    /* モバイル */
+
+  /* カード */
+  --card-gap:     16px; /* モバイル */
+  --card-padding: 24px; /* モバイル */
+
+  /* コンテンツ幅 */
+  --max-content: 900px;
+  --max-text:    720px;
+  --max-narrow:  560px;
+
+  /* フォント */
+  --font-serif: 'Noto Serif JP', Georgia, serif;
+  --font-sans:  'Noto Sans JP', sans-serif;
+
+  /* タイポグラフィ（モバイルサイズ） */
+  --text-h1:   34px;
+  --text-h2:   28px;  /* [品質改善] 26px→28px: モバイルでの階層差を明確化 */
+  --text-h3:   20px;
+  --text-h4:   18px;
+  --text-body: 16px;
+  --text-sm:   15px;
+  --text-cap:  13px;
+  --text-lbl:  11px;
+
+  /* 行間・字間 */
+  --leading-tight:   1.3;
+  --leading-head:    1.5;
+  --leading-body:    1.85; /* [品質改善] 1.9→1.85: 日本語は1.9だと行間が空きすぎる */
+  --tracking-body:   0.04em;
+  --tracking-head:   0.08em;
+  --tracking-wide:   0.15em;
+  --tracking-lbl:    0.20em;
+
+  /* トランジション */
+  --dur-fast:   0.2s;
+  --dur-mid:    0.35s;
+  --dur-slow:   0.6s;
+  --ease:       ease;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* デスクトップ上書き */
+@media (min-width: 1024px) {
+  :root {
+    --section-v: 120px;
+    --section-h: 48px;
+    --card-gap:     24px;
+    --card-padding: 32px;
+    --text-h1: 56px;
+    --text-h2: 36px;
+    --text-h3: 24px;
+    --text-h4: 20px;
+  }
+}
+
+
+/* ================================================================
+   2. リセット & ベーススタイル
+   ================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  color: var(--color-text-dark);
+  background: var(--color-bg-dark);
+  /* スティッキーバー分の余白（モバイル） */
+  padding-bottom: 52px;
+}
+
+@media (min-width: 1024px) {
+  body { padding-bottom: 56px; }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+sup {
+  font-size: 0.65em;
+  vertical-align: super;
+}
+
+/* ================================================================
+   3. レイアウト共通
+   ================================================================ */
+.container {
+  width: 100%;
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 var(--section-h);
+}
+
+/* セクション共通 */
+.section {
+  position: relative;
+  padding: var(--section-v) 0;
+}
+
+/* セクション背景バリエーション */
+.section--light     { background: var(--color-bg-light); }
+.section--dark      { background: var(--color-bg-dark); }
+.section--muted     { background: var(--color-bg-muted); }
+.section--final-cta { background: var(--color-bg-dark); }
+
+/* ================================================================
+   4. 共通タイポグラフィ
+   ================================================================ */
+
+/* アイキャッチラベル（セクション見出し上の小テキスト） */
+.label {
+  font-size: var(--text-lbl);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: var(--tracking-lbl);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--sp-2);
+  display: block;
+}
+
+/* セクション共通 H2 */
+.section__h2 {
+  font-size: var(--text-h2);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: var(--tracking-head);
+  line-height: var(--leading-head);
+  margin-bottom: var(--sp-6);
+}
+
+.section--dark  .section__h2,
+.section--final-cta .section__h2 {
+  color: var(--color-text-light);
+}
+
+.section--light .section__h2,
+.section--muted .section__h2 {
+  color: var(--color-text-dark);
+}
+
+/* H2 内バッジ（カテゴリセクション） */
+.h2-badge {
+  display: inline-block;
+  font-size: var(--text-lbl);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: var(--tracking-lbl);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold-border);
+  padding: 4px 12px;
+  margin-top: var(--sp-2);
+  vertical-align: middle;
+}
+
+/* モバイルのみ改行用 */
+.sp-only { display: block; }
+@media (min-width: 768px) { .sp-only { display: none; } }
+
+/* eyebrow（FV上部ラベル） */
+.eyebrow {
+  font-size: var(--text-lbl);
+  font-weight: 600;
+  letter-spacing: var(--tracking-lbl);
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.9);
+  margin-bottom: var(--sp-2);
+}
+
+
+/* ================================================================
+   5. ボタン
+   ================================================================ */
+
+/* ベース */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px; /* [品質改善] 0→2px: シャープさを保ちつつ現代的な微丸みに */
+  transition:
+    background var(--dur-fast) var(--ease),
+    color      var(--dur-fast) var(--ease),
+    transform  var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+  white-space: normal;
+  word-break: keep-all;
+}
+
+/* フォーカスアクセシビリティ */
+.btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* プライマリボタン（ゴールド背景） */
+.btn--primary {
+  background: var(--color-gold);
+  color: var(--color-bg-dark);
+  padding: 0 var(--sp-5);
+  height: 54px;
+  width: 100%;
+  max-width: 440px;
+}
+
+@media (hover: hover) {
+  .btn--primary:hover {
+    background: var(--color-gold-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.30);
+  }
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Pulse アニメーション（S11クロージングボタンに付与） */
+.btn--pulse {
+  animation: pulse 2.4s ease infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0  0px rgba(201, 168, 76, 0.50); }
+  70%  { box-shadow: 0 0 0 14px rgba(201, 168, 76, 0.00); }
+  100% { box-shadow: 0 0 0  0px rgba(201, 168, 76, 0.00); }
+}
+
+/* セカンダリボタン（アウトライン） */
+.btn--secondary {
+  background: transparent;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold-border);
+  padding: 0 var(--sp-4);
+  height: 48px;
+  width: 100%;
+  max-width: 360px;
+}
+
+@media (hover: hover) {
+  .btn--secondary:hover {
+    background: var(--color-gold-subtle);
+  }
+}
+
+/* CTAブロック（ボタン＋マイクロコピー） */
+.cta-block {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-5);        /* [品質改善] コンテンツとCTAの視覚的分離 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* セクション背景に合わせたCTAブロック上部の区切り線 */
+.section--light  .cta-block,
+.section--muted  .cta-block { border-top: 1px solid var(--color-border-light); }
+.section--dark   .cta-block,
+.section--final-cta .cta-block { border-top: 1px solid rgba(255,255,255,0.08); }
+
+/* マイクロコピー（ボタン下の補足テキスト） */
+.cta-micro {
+  font-size: var(--text-cap);
+  color: var(--color-text-caption);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.section--dark  .cta-micro,
+.section--final-cta .cta-micro { color: rgba(255,255,255,0.40); }
+
+
+/* ================================================================
+   6. スティッキーバー（画面下部固定）
+   ================================================================ */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: var(--color-bg-dark);
+  border-top: 1px solid rgba(201, 168, 76, 0.30);
+  z-index: 1000;
+  display: none;            /* JS で表示制御 */
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-3);
+  /* iPhone ノッチ対応 */
+  padding-bottom: max(0px, env(safe-area-inset-bottom));
+}
+
+.sticky-bar.is-visible {
+  display: flex;
+}
+
+.sticky-bar__info {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: var(--sp-2);
+}
+
+.sticky-bar__btn {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  background: var(--color-gold);
+  color: var(--color-bg-dark);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  transition: background var(--dur-fast);
+}
+
+@media (hover: hover) {
+  .sticky-bar__btn:hover { background: var(--color-gold-hover); }
+}
+
+@media (min-width: 1024px) {
+  .sticky-bar {
+    height: 56px;
+    padding: 0 var(--sp-6);
+  }
+  .sticky-bar__info { font-size: 13px; }
+  .sticky-bar__btn  { height: 36px; font-size: 13px; }
+}
+
+
+/* ================================================================
+   7. S1: ヒーローセクション（FV）
+   ================================================================ */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px var(--sp-3) 64px;
+  /* 画像_ビジョン.jpg を背景に + ダークオーバーレイ */
+  background-image:
+    linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.90) 100%),
+    url('画像_ビジョン.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-color: var(--color-bg-dark); /* 画像読み込み失敗時の fallback */
+  position: relative;
+}
+
+/* ロゴ（左上絶対配置） */
+.hero__header {
+  position: absolute;
+  top: 28px;
+  left: var(--sp-3);
+}
+
+.hero__logo {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* コンテンツエリア */
+.hero__content {
+  max-width: var(--max-text);
+}
+
+.hero__h1 {
+  font-size: var(--text-h1);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: var(--tracking-head);
+  line-height: var(--leading-tight);
+  color: var(--color-text-light);
+  margin-bottom: var(--sp-4);
+}
+
+.hero__sub {
+  font-size: 18px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: var(--sp-5); /* [品質改善] sp-3→sp-5: hero__lead削除後のCTAとの間隔を確保 */
+}
+
+.hero__lead {
+  font-size: 15px;
+  line-height: var(--leading-body);
+  color: rgba(255, 255, 255, 0.70);
+  max-width: 540px;
+  margin-bottom: var(--sp-6);
+}
+
+/* スクロールヒント（モバイルのみ） */
+.scroll-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 10px;
+  letter-spacing: var(--tracking-lbl);
+  text-transform: uppercase;
+  animation: bounce-hint 2s ease-in-out infinite;
+}
+
+@keyframes bounce-hint {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+@media (min-width: 768px) {
+  .scroll-hint { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 120px var(--section-h) 80px;
+  }
+  .hero__header { left: var(--section-h); top: 32px; }
+  .hero__logo { width: 120px; }
+  .hero__sub { font-size: 22px; }
+}
+
+
+/* ================================================================
+   8. S2: 課題提起セクション
+   ================================================================ */
+.issue__question {
+  font-size: 20px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--color-text-dark);
+  margin-bottom: var(--sp-6);
+}
+
+.issue__list {
+  margin-bottom: var(--sp-6);
+}
+
+.issue__list li {
+  position: relative;
+  padding-left: 1.4em;
+  margin-bottom: var(--sp-2);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.issue__list li::before {
+  content: '・';
+  position: absolute;
+  left: 0;
+  color: var(--color-gold);
+}
+
+.issue__bridge {
+  border-left: 3px solid var(--color-gold);
+  padding-left: var(--sp-2);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--color-text-sub);
+  line-height: var(--leading-body);
+  margin-bottom: var(--sp-4);
+}
+
+.issue__cta-bridge {
+  font-size: var(--text-sm);
+  color: var(--color-text-sub);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+@media (min-width: 1024px) {
+  .issue__question { font-size: 24px; }
+}
+
+
+/* ================================================================
+   9. S3: ビジョン・Givers Gain® セクション
+   ================================================================ */
+.vision__body {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-text-muted);
+  max-width: var(--max-text);
+  margin-bottom: var(--sp-6);
+}
+
+/* ビジョンボックス */
+.vision__box {
+  border: 1px solid var(--color-gold-border);
+  padding: 32px var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.vision__box-label {
+  font-size: var(--text-lbl);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  margin-bottom: var(--sp-2);
+}
+
+.vision__statement {
+  font-size: 20px;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: var(--sp-2);
+}
+
+.vision__mission {
+  font-size: var(--text-cap);
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.7;
+}
+
+.vision__bridge {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+@media (min-width: 1024px) {
+  .vision__box { padding: 40px var(--sp-6); }
+  .vision__statement { font-size: 22px; }
+}
+
+
+/* ================================================================
+   10. S4: 差別化・比較表セクション
+   ================================================================ */
+
+/* テーブル横スクロールラッパー */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--sp-5);
+}
+
+.comparison-table {
+  width: 100%;
+  /* [品質改善] min-width: 520px を削除: スマホ横スクロールを解消 */
+  /* 代わりにモバイルでは各セルを縦積みレイアウトにする（下記media queryで制御） */
+  border-collapse: collapse;
+}
+
+/* ヘッダー行 */
+.comparison-table th {
+  padding: 14px 20px;
+  font-size: var(--text-lbl);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-align: left;
+}
+
+/* [品質改善] スマホ: テーブルを縦積みカードに変換（横スクロール廃止） */
+@media (max-width: 599px) {
+  .table-wrap { overflow-x: unset; }
+
+  .comparison-table thead { display: none; } /* ヘッダー非表示 */
+
+  .comparison-table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: none;
+    margin-bottom: 2px;
+  }
+
+  .comparison-table tbody tr td {
+    padding: 14px 14px;
+    font-size: 13px;
+    border-bottom: none;
+  }
+
+  /* 左列（一般）: くすんだ背景 */
+  .comparison-table tbody tr td:first-child {
+    position: relative;
+  }
+  /* 一般チャプターのラベルをbefore疑似要素で補完 */
+  .comparison-table tbody tr:first-child td:first-child::before {
+    content: "一般チャプター";
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .comparison-table tbody tr:first-child td:last-child::before {
+    content: "鑑チャプター";
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .table-hint { display: none; } /* スクロールヒント不要 */
+}
+
+.th--general {
+  background: #EDECE9;
+  color: var(--color-text-sub);
+}
+
+.th--kagami {
+  background: var(--color-gold);
+  color: var(--color-bg-dark);
+}
+
+/* ボディセル */
+.comparison-table td {
+  padding: 18px 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: top;
+}
+
+.comparison-table tbody tr td:first-child {
+  background: #F0EFE9;
+  color: #777;
+}
+
+.comparison-table tbody tr td:last-child {
+  background: var(--color-bg-light);
+  font-weight: 500;
+  color: var(--color-text-dark);
+}
+
+/* モバイル向けスクロールヒント */
+.table-hint {
+  font-size: 11px;
+  color: var(--color-text-caption);
+  text-align: center;
+  margin-top: var(--sp-1);
+}
+
+@media (min-width: 768px) {
+  .table-hint { display: none; }
+}
+
+/* 比較表下の本文 */
+.comparison__body {
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  color: var(--color-text-sub);
+  margin-bottom: var(--sp-2);
+}
+
+
+/* ================================================================
+   11. S5: 参加メリット（3カード）
+   ================================================================ */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--card-gap);
+  margin-top: var(--sp-1);
+}
+
+.benefit-card {
+  background: var(--color-bg-muted);
+  border-top: 3px solid var(--color-gold);
+  padding: var(--card-padding);
+}
+
+.benefit-card__num {
+  display: block;
+  font-size: 48px;
+  font-weight: 800;
+  color: rgba(201, 168, 76, 0.22);
+  line-height: 1;
+  margin-bottom: var(--sp-2);
+  font-family: var(--font-sans);
+}
+
+.benefit-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.benefit-card__body {
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  color: var(--color-text-sub);
+  margin-bottom: var(--sp-2);
+}
+
+/* シナリオテキスト（体験イメージ） */
+.benefit-card__scenario {
+  border-left: 2px solid rgba(201, 168, 76, 0.50);
+  padding-left: 12px;
+  font-size: 14px;
+  font-style: italic;
+  color: #777;
+  line-height: 1.7;
+}
+
+@media (min-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* ================================================================
+   12. S6: 価値観（5バリューカード）
+   ================================================================ */
+.values-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: var(--sp-6);
+}
+
+.value-card {
+  padding: 24px 20px;
+  border: 1px solid var(--color-border-subtle);
+  background: rgba(255, 255, 255, 0.03);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background   var(--dur-fast) var(--ease),
+    transform    var(--dur-mid)  var(--ease-smooth);
+}
+
+/* ホバーエフェクト（タッチデバイス除外） */
+@media (hover: hover) {
+  .value-card:hover {
+    border-color: var(--color-gold-border);
+    background: rgba(201, 168, 76, 0.04);
+    transform: translateY(-4px);
+  }
+}
+
+.value-card__icon {
+  color: var(--color-gold);
+  margin-bottom: var(--sp-3);
+}
+
+.value-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-light);
+  margin-bottom: 10px;
+  letter-spacing: var(--tracking-body);
+}
+
+.value-card__body {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+.values__bridge {
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* タブレット: 2カラム */
+@media (min-width: 768px) {
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--card-gap);
+  }
+  .value-card { padding: var(--card-padding) 28px; }
+}
+
+/* [バグ修正] デスクトップ: 3+2カラム（5枚均等）
+   旧コードの問題: grid-template-areas "a b c" / ". d e ." は4列定義だが
+   grid-template-columns: repeat(3, 1fr) は3列 → 不一致でレイアウト崩れ
+   修正: 6列グリッドを使い、各カードが2列ずつ占有する形に変更 */
+@media (min-width: 1024px) {
+  .values-grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+      "a a b b c c"
+      ". d d e e .";
+    gap: 16px;
+  }
+  .value-card:nth-child(1) { grid-area: a; }
+  .value-card:nth-child(2) { grid-area: b; }
+  .value-card:nth-child(3) { grid-area: c; }
+  .value-card:nth-child(4) { grid-area: d; }
+  .value-card:nth-child(5) { grid-area: e; }
+}
+
+
+/* ================================================================
+   13. S7: 入会基準セクション
+   ================================================================ */
+.criteria-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.criteria-card {
+  padding: 28px var(--sp-3);
+  background: var(--color-bg-light);
+}
+
+.criteria-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.criteria-card--yes .criteria-card__title { color: var(--color-text-dark); }
+.criteria-card--no  .criteria-card__title { color: var(--color-red-muted); }
+
+/* ✔ リスト */
+.criteria-list { margin-bottom: 0; }
+
+.criteria-list li {
+  position: relative;
+  padding: 10px 0 10px 28px;
+  border-bottom: 1px solid #F5F4F1;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.criteria-list--yes li::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  color: var(--color-green);
+  font-weight: 700;
+}
+
+.criteria-list--no li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--color-red-muted);
+  font-weight: 700;
+}
+
+.criteria-note {
+  margin-top: var(--sp-3);
+  font-size: var(--text-cap);
+  color: var(--color-text-caption);
+  line-height: 1.7;
+}
+
+/* 社会的証明ボックス */
+.criteria-proof {
+  background: var(--color-bg-light);
+  border-left: 4px solid var(--color-gold);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-sub);
+  line-height: var(--leading-body);
+  margin-bottom: var(--sp-4);
+}
+
+/* 離脱防止ブリッジ */
+.criteria-bridge {
+  background: var(--color-bg-light);
+  border-left: 4px solid var(--color-gold);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: #555;
+  line-height: var(--leading-body);
+  margin-bottom: var(--sp-1);
+}
+
+@media (min-width: 768px) {
+  .criteria-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .criteria-card { padding: 40px 36px; }
+}
+
+
+/* ================================================================
+   14. S8: 募集カテゴリセクション
+   ================================================================ */
+.categories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-6);
+}
+
+.category-group__title {
+  font-size: var(--text-lbl);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.30);
+  padding-bottom: 8px;
+  margin-bottom: var(--sp-2);
+}
+
+.category-group__title--mt {
+  margin-top: var(--sp-4);
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: var(--text-sm);
+  color: var(--color-text-dark);
+}
+
+/* 緑の丸ドット */
+.recruiting-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-green);
+  flex-shrink: 0;
+}
+
+/* 「募集中」バッジ */
+.badge-open {
+  font-size: 10px;
+  background: rgba(42, 122, 74, 0.12);
+  color: var(--color-green);
+  padding: 2px 8px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* カテゴリなし離脱防止ノート */
+.categories-note {
+  background: var(--color-bg-muted);
+  padding: var(--sp-3) var(--sp-3);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  color: var(--color-text-dark);
+}
+
+.categories-note__sub {
+  margin-top: var(--sp-2);
+  font-size: var(--text-cap);
+  color: var(--color-text-caption);
+}
+
+@media (min-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* ================================================================
+   15. S9: 活動情報セクション
+   ================================================================ */
+.activity-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-6);
+}
+
+.activity-block__label {
+  font-size: var(--text-lbl);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  margin-bottom: var(--sp-3);
+}
+
+.activity-info .activity-info__row {
+  display: flex;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  align-items: baseline;
+}
+
+.activity-info dt {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.40);
+  min-width: 72px;
+  flex-shrink: 0;
+}
+
+.activity-info dd {
+  font-size: var(--text-body);
+  font-weight: 500;
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+.activity-info small {
+  font-size: var(--text-cap);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* 対面理由テキスト */
+.activity-reason {
+  margin-top: var(--sp-4);
+  padding-left: var(--sp-2);
+  border-left: 2px solid rgba(201, 168, 76, 0.40);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.8;
+}
+
+/* 参加方法ブロック */
+.activity-how {
+  margin-top: var(--sp-4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border-subtle);
+  padding: var(--sp-3);
+}
+
+.activity-how__title {
+  font-size: var(--text-lbl);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  margin-bottom: var(--sp-2);
+}
+
+.activity-how__body {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-body);
+}
+
+@media (min-width: 768px) {
+  .activity-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-8);
+  }
+}
+
+
+/* ================================================================
+   16. S10: FAQ アコーディオン
+   ================================================================ */
+
+/* [品質改善] FAQ導入テキスト */
+.faq-intro {
+  font-size: var(--text-sm);
+  color: var(--color-text-sub);
+  text-align: center;
+  margin-bottom: var(--sp-5);
+  line-height: 1.7;
+}
+
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+  text-align: left;
+  min-height: 56px;         /* スマホのタッチターゲット確保 */
+}
+
+.faq-q {
+  display: inline-block;
+  min-width: 22px;
+  font-size: var(--text-lbl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.faq-question__text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+}
+
+/* 開閉矢印 */
+.faq-arrow {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--color-text-caption);
+  transition: transform var(--dur-mid) var(--ease-smooth);
+}
+
+.faq-item[data-open="true"] .faq-arrow {
+  transform: rotate(180deg);
+}
+
+/* 回答エリア：max-height でアニメーション */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-mid) var(--ease-smooth);
+}
+
+.faq-item[data-open="true"] .faq-answer {
+  max-height: 600px;
+}
+
+.faq-answer p {
+  font-size: var(--text-sm);
+  color: var(--color-text-sub);
+  line-height: var(--leading-body);
+  padding-bottom: var(--sp-3);
+}
+
+
+/* ================================================================
+   17. S10.5: 感情再点火ブロック
+   ================================================================ */
+.section--rekindle {
+  position: relative;
+  background-image:
+    linear-gradient(rgba(10,10,10,0.86), rgba(10,10,10,0.86)),
+    url('画像_ビジョン.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-bg-dark);
+  padding: var(--sp-10) var(--section-h);
+  text-align: center;
+}
+
+.rekindle__quote {
+  font-size: 20px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-text-light);
+  line-height: 1.8;
+  letter-spacing: var(--tracking-body);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .section--rekindle { padding: 100px var(--section-h); }
+  .rekindle__quote { font-size: 26px; }
+}
+
+
+/* ================================================================
+   18. S11: クロージングCTAセクション
+   ================================================================ */
+.section--final-cta {
+  text-align: center;
+  padding: var(--sp-8) 0 100px;
+}
+
+.final-cta__body {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.70);
+  max-width: var(--max-narrow);
+  margin: 0 auto var(--sp-6);
+  line-height: var(--leading-body);
+}
+
+/* 紹介者あり：メイン説明 */
+.final-cta__primary {
+  background: rgba(201, 168, 76, 0.07);
+  border: 1px solid var(--color-gold-border);
+  padding: var(--sp-4) var(--sp-3);
+  max-width: 480px;
+  margin: 0 auto var(--sp-5);
+}
+
+.final-cta__primary-label {
+  font-size: var(--text-lbl);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-lbl);
+  color: var(--color-gold);
+  margin-bottom: var(--sp-2);
+}
+
+.final-cta__instruction {
+  font-size: 18px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: var(--sp-3);
+}
+
+.final-cta__detail {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.60);
+  line-height: 1.7;
+}
+
+.final-cta__detail small {
+  display: block;
+  margin-top: 6px;
+  font-size: var(--text-cap);
+  color: rgba(255, 255, 255, 0.40);
+}
+
+/* 紹介者なし：サブCTA */
+.final-cta__sub {
+  margin-top: var(--sp-6);
+  padding: var(--sp-4) var(--sp-3);
+  border: 1px dashed rgba(255, 255, 255, 0.20);
+  max-width: 480px;
+  margin-inline: auto;
+  margin-top: var(--sp-5);
+}
+
+.final-cta__sub-label {
+  font-size: var(--text-cap);
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: var(--sp-2);
+}
+
+.final-cta__sub-body {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.50);
+  line-height: 1.8;
+  margin-bottom: var(--sp-4);
+}
+
+/* サブCTAのボタンはmax-width制限なし（コンテナに合わせる） */
+.final-cta__sub .btn--primary {
+  max-width: 100%;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .section--final-cta { padding: 120px 0 140px; }
+  .final-cta__instruction { font-size: 22px; }
+}
+
+
+/* ================================================================
+   19. フッター
+   ================================================================ */
+.footer {
+  background: #050505;
+  border-top: 1px solid rgba(201, 168, 76, 0.20);
+  padding: var(--sp-6) 0 var(--sp-6);
+}
+
+.footer__inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.footer__logo {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.7;
+}
+
+.footer__name {
+  font-size: 15px;
+  font-family: var(--font-serif);
+  color: rgba(255, 255, 255, 0.60);
+  letter-spacing: var(--tracking-head);
+}
+
+.footer__info {
+  font-size: var(--text-cap);
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.7;
+}
+
+.footer__legal {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1.8;
+}
+
+
+/* ================================================================
+   20. スクロールフェードイン アニメーション
+   ================================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity  var(--dur-slow) var(--ease-smooth),
+    transform var(--dur-slow) var(--ease-smooth);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CSS変数 --delay によるスタガー（カード群に使用） */
+.fade-in[style*="--delay"] {
+  transition-delay: var(--delay, 0s);
+}
+
+
+/* ================================================================
+   21. [CV改善1] ヒーローCTAグループ（FVにプライマリ+ゴーストボタン並列）
+   ================================================================ */
+
+/* 2つのボタンを縦並びにする（モバイル） */
+.hero__cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  margin-top: 0; /* hero__sub の margin-bottom (sp-5) で間隔を管理 */
+}
+
+/* タブレット以上: 横並び */
+@media (min-width: 768px) {
+  .hero__cta-group {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  /* 横並び時はauto幅に */
+  .hero__cta-group .btn--primary,
+  .hero__cta-group .btn--ghost {
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* ゴーストボタン（FV用: 白/半透明アウトライン） */
+/* section--dark 背景での使用を前提に設計 */
+.btn--ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-body);
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+  padding: 0 var(--sp-4);
+  height: 48px;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color      var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.90);
+    border-color: rgba(255, 255, 255, 0.40);
+  }
+}
+
+.btn--ghost:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.50);
+  outline-offset: 3px;
+}
+
+
+/* ================================================================
+   22. [CV改善5] S10.5: 感情再点火セクション内CTAスタイル
+   ================================================================ */
+
+/* 感情コピー直下に配置するCTAコンテナ */
+.rekindle__cta {
+  margin-top: var(--sp-6);
+  display: flex;
+  justify-content: center;
+}
+
+/* rekindle背景（暗い）上ではプライマリボタンをそのまま使用 */
+/* btn--primaryのmax-widthはそのまま適用される */
+
+
+/* ================================================================
+   23. [CV改善6] S11: 希少性バナー（urgency-banner）
+   ================================================================ */
+
+.urgency-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  padding: 12px var(--sp-3);
+  margin: 0 auto var(--sp-5);
+  max-width: 560px;
+  font-size: var(--text-cap);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* 点滅する緑のドット（「受付中」の視覚的シグナル） */
+.urgency-banner__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-green);
+  flex-shrink: 0;
+  animation: blink-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+
+/* ================================================================
+   24. [CV改善6] S11: 参加ステップフロー（steps-flow）
+   ================================================================ */
+
+.steps-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin: 0 auto var(--sp-6);
+  max-width: 560px;
+  flex-wrap: wrap;  /* スマホ折り返し対応 */
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 90px;
+}
+
+/* ステップ番号（金色の丸） */
+.step__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: var(--color-bg-dark);
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+}
+
+.step__text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* → 矢印セパレータ */
+.step__sep {
+  font-size: 20px;
+  color: rgba(201, 168, 76, 0.50);
+  font-weight: 300;
+  align-self: flex-start;
+  margin-top: 8px;  /* 数字の高さに合わせる */
+}
+
+@media (min-width: 480px) {
+  .step { min-width: 110px; }
+  .step__text { font-size: 13px; }
+}
+
+@media (min-width: 768px) {
+  .steps-flow {
+    flex-wrap: nowrap;
+    gap: var(--sp-3);
+  }
+  .step__sep { align-self: center; margin-top: 0; }
+}
